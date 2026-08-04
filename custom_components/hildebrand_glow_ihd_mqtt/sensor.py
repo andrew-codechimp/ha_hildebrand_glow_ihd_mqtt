@@ -493,7 +493,15 @@ class HildebrandGlowMqttSensor(SensorEntity):
 
     def process_update(self, mqtt_data) -> None:
         """Update the state of the sensor."""
-        new_value = self._func(mqtt_data)
+        try:
+            new_value = self._func(mqtt_data)
+        except KeyError:
+            _LOGGER.debug(
+                "Missing key in MQTT data for %s, state unknown.",
+                self._attr_unique_id,
+            )
+            return
+        
         if self._ignore_zero_values and new_value == 0:
             _LOGGER.debug(
                 "Ignored new value of %s on %s.", new_value, self._attr_unique_id

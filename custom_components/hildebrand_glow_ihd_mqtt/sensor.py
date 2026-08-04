@@ -171,14 +171,21 @@ ELECTRICITY_SENSORS = [
         "state_class": SensorStateClass.TOTAL,
         "icon": "mdi:cash",
         "meter_interval": MeterInterval.DAY,
-        "func": lambda js: round(
-            (js["electricitymeter"]["energy"]["import"]["price"]["standingcharge"] or 0)
-            + (
-                (js["electricitymeter"]["energy"]["import"]["day"] or 0)
-                * (js["electricitymeter"]["energy"]["import"]["price"]["unitrate"] or 0)
-            ),
-            2,
+        "func": lambda js: (
+            round(
+                js["electricitymeter"]["energy"]["import"]["price"]["standingcharge"]
+                + (
+                    js["electricitymeter"]["energy"]["import"]["day"]
+                    * js["electricitymeter"]["energy"]["import"]["price"]["unitrate"]
+                ),
+                2,
+            )
+            if (js["electricitymeter"]["energy"]["import"]["price"]["standingcharge"] is not None
+                and js["electricitymeter"]["energy"]["import"]["day"] is not None
+                and js["electricitymeter"]["energy"]["import"]["price"]["unitrate"] is not None)
+            else 0
         ),
+        "ignore_zero_values": True,
     },
 ]
 
@@ -285,14 +292,21 @@ GAS_SENSORS = [
         "state_class": SensorStateClass.TOTAL,
         "icon": "mdi:cash",
         "meter_interval": MeterInterval.DAY,
-        "func": lambda js: round(
-            (js["gasmeter"]["energy"]["import"]["price"]["standingcharge"] or 0)
-            + (
-                (js["gasmeter"]["energy"]["import"]["day"] or 0)
-                * (js["gasmeter"]["energy"]["import"]["price"]["unitrate"] or 0)
-            ),
-            2,
+        "func": lambda js: (
+            round(
+                js["gasmeter"]["energy"]["import"]["price"]["standingcharge"]
+                + (
+                    js["gasmeter"]["energy"]["import"]["day"]
+                    * js["gasmeter"]["energy"]["import"]["price"]["unitrate"]
+                ),
+                2,
+            )
+            if (js["gasmeter"]["energy"]["import"]["price"]["standingcharge"] is not None
+                and js["gasmeter"]["energy"]["import"]["day"] is not None
+                and js["gasmeter"]["energy"]["import"]["price"]["unitrate"] is not None)
+            else 0
         ),
+        "ignore_zero_values": True,
     },
 ]
 

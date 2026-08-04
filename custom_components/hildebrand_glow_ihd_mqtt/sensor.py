@@ -172,10 +172,10 @@ ELECTRICITY_SENSORS = [
         "icon": "mdi:cash",
         "meter_interval": MeterInterval.DAY,
         "func": lambda js: round(
-            js["electricitymeter"]["energy"]["import"]["price"]["standingcharge"]
+            (js["electricitymeter"]["energy"]["import"]["price"]["standingcharge"] or 0)
             + (
-                js["electricitymeter"]["energy"]["import"]["day"]
-                * js["electricitymeter"]["energy"]["import"]["price"]["unitrate"]
+                (js["electricitymeter"]["energy"]["import"]["day"] or 0)
+                * (js["electricitymeter"]["energy"]["import"]["price"]["unitrate"] or 0)
             ),
             2,
         ),
